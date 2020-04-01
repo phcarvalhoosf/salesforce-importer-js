@@ -1,0 +1,23 @@
+{
+  "name": "salesforce-importer",
+  "version": "1.0.0",
+  "description": "Application to import data in a salesforce org",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phcarvalhoosf/salesforce-importer-js.git"
+  },
+  "author": "Paulo Carvalho (paulo.carvalho@osf.digital)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/phcarvalhoosf/salesforce-importer-js/issues"
+  },
+  "homepage": "https://github.com/phcarvalhoosf/salesforce-importer-js#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "jsforce": "^1.9.3"
+  }
+}
