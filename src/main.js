@@ -20,7 +20,7 @@ const importCSVAccount = () => {
     // Instantiate a parser to CSV file - The parser logic is decoupled of the business logic 
     // in order to make easier to change the parser logic to another input data structure
     const CSVObjectParser = require("./CSVObjectParser");
-    const parser = new CSVObjectParser("assets/Account.csv", "./account/Account");
+    const parser = new CSVObjectParser("assets/Account.csv");
 
     // Parse the input from a CSV file to a JSON object formatted to JSforce API
     const objectArray = [];

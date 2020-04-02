@@ -1,8 +1,7 @@
 module.exports = class CSVObjectParser {
 
-    constructor(filePath, classPath) {
+    constructor(filePath) {
         this.filePath = filePath;
-        this.classPath = classPath;
     }
 
     parse(callback) {
