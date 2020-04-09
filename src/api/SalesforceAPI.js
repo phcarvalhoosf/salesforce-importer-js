@@ -1,4 +1,5 @@
 const jsforce = require("jsforce");
+const log4js = require("log4js");
 
 module.exports = class SalesforceAPI {
 
@@ -10,11 +11,10 @@ module.exports = class SalesforceAPI {
         this.connection.login(username, password,
             (error, user) => {
 
-                if (error) {
-                    return console.error(error);
-                }
+                if (error)
+                    return global.logger.error("Error to connect to Salesforce! Error: ", error);
 
-                console.log("User connected! User: ", user);
+                global.logger.info("User connected! User id: ", user.id);
                 successCallback();
             });
     }

@@ -11,18 +11,18 @@ module.exports = class JobProcessor {
         const batch = this.job.createBatch();
 
         batch.execute(objectArray);
-        batch.on("queue", function (batch) {
-            console.log("Batch queued! Batch: ", batch);
+        batch.on("queue", (batch) => {
+            global.logger.info("Batch queued! Batch id: ", batch.id, " | Job id: ", batch.jobId);
             // this.batchArray.push(batch);
         });
-        batch.on("response", function (responseArray) {
+        batch.on("response", (responseArray) => {
 
             for (var counter = 0; counter < responseArray.length; counter++) {
 
                 if (responseArray[counter].success)
-                    console.log("Batch finished with success! Response: " + responseArray[counter]);
+                    global.logger.info("Batch finished with success! Response: " + responseArray[counter]);
                 else
-                    console.log("Batch finished with error! Response: " + responseArray[counter]
+                    global.logger.info("Batch finished with error! Response: " + responseArray[counter]
                         + " | Message: " + responseArray[counter].errors.join(', '));
             }
         });

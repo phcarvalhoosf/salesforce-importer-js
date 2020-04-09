@@ -1,8 +1,23 @@
 require("dotenv").config();
 const SalesforceAPI = require("./api/SalesforceAPI");
 const DatabaseAPI = require("./api/DatabaseAPI");
-const ScheduledTask = require("./entity/ScheduledTask");
 const ScheduledTaskProcessor = require("./service/ScheduledTaskProcessor");
+const log4js = require("log4js");
+
+const configureLogger = () => {
+    log4js.configure({
+        appenders: {
+            stdout: { type: "stdout" },
+            file: { type: "file", filename: "./logs/log.log" }
+        },
+        categories: {
+            default: { appenders: ["stdout", "file"], level: "info" }
+        }
+    });
+
+    global.logger = log4js.getLogger();
+    global.logger.level = "info";
+}
 
 const connectToSalesforce = (successCallback) => {
     const username = process.env.USER_NAME;
@@ -28,11 +43,9 @@ const processScheduledTaskArray = () => {
         (error, scheduledTaskArray) => {
 
             if (error)
-                console.warn("Error to find scheduled task array! Error: ", error);
+                global.logger.error("Error to find scheduled task array! Error: ", error);
             else
-                scheduledTaskArray.forEach((scheduledTask) => {
-                    processScheduledTask(scheduledTask);
-                });
+                scheduledTaskArray.forEach((scheduledTask) => processScheduledTask(scheduledTask));
         });
 }
 
@@ -41,4 +54,5 @@ const connectSuccessCallback = () => {
     processScheduledTaskArray();
 }
 
+configureLogger();
 connectToSalesforce(connectSuccessCallback);

@@ -17,7 +17,8 @@ module.exports = class ScheduledTaskProcessor {
     execute() {
         cron.schedule(this.scheduledTask.cronExpression,
             () => {
-                console.log("Scheduled task started! Schedule Task: ", this.scheduledTask);
+                global.logger.info("Scheduled task started! Schedule task id: ", this.scheduledTask.id);
+
                 this.process(this.scheduledTask);
             });
     }

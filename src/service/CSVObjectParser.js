@@ -20,11 +20,10 @@ module.exports = class CSVObjectParser {
 
                     if (fieldArray.length > 0) {
 
-                        if (!templateObject) {
+                        if (!templateObject)
                             templateObject = this._buildTemplateObject(fieldArray);
-                        } else {
+                        else
                             objectArray.push(this._buildObject(templateObject, fieldArray));
-                        }
                     }
                 });
             })
