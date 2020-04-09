@@ -1,0 +1,1 @@
+{"type":"importJob","cronExpression":"* * * * *","data":{"objectType":"Account","operationType":"insert","filePath":"assets/Account.csv"},"_id":"WRRI4UsbSoJBMWwP"}

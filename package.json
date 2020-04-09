@@ -18,6 +18,9 @@
   "homepage": "https://github.com/phcarvalhoosf/salesforce-importer-js#readme",
   "dependencies": {
     "dotenv": "^8.2.0",
-    "jsforce": "^1.9.3"
+    "jsforce": "^1.9.3",
+    "log4js": "^6.1.2",
+    "nedb": "^1.8.0",
+    "node-cron": "^2.0.3"
   }
 }
