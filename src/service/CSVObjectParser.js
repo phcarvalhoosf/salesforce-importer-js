@@ -1,4 +1,5 @@
 const ts = require("fs");
+const eventStream = require('event-stream');
 
 module.exports = class CSVObjectParser {
 
@@ -7,15 +8,20 @@ module.exports = class CSVObjectParser {
     }
 
     parse(endCallback) {
+        global.logger.info("Start file parse! File path: ", this.filePath);
+
         const readStream = ts.createReadStream(this.filePath);
+
+        global.logger.info("Read stream created! Read stream: ", readStream);
+
         const objectArray = [];
         let templateObject = null;
 
-        readStream.on('data',
-            (chunk) => {
-                const fileLineArray = chunk.toString().split("\r\n");
+        readStream.pipe(eventStream.split())
+            .pipe(eventStream.mapSync(
+                (fileLine) => {
+                    global.logger.info("Read stream line! Line: ", fileLine);
 
-                fileLineArray.forEach((fileLine) => {
                     const fieldArray = fileLine.split(",");
 
                     if (fieldArray.length > 0) {
@@ -25,10 +31,15 @@ module.exports = class CSVObjectParser {
                         else
                             objectArray.push(this._buildObject(templateObject, fieldArray));
                     }
-                });
-            })
-            .on('end',
-                () => endCallback(objectArray))
+                })
+                .on('error',
+                    (error) => global.logger.error("Read stream error! Error: ", error))
+                .on('end',
+                    () => {
+                        global.logger.info("Read stream end!");
+                        endCallback(objectArray);
+                    })
+            );
     }
 
     _buildTemplateObject(fieldNameArray) {
@@ -49,6 +60,8 @@ module.exports = class CSVObjectParser {
 
             object[fieldName] = fieldValue;
         });
+
+        global.logger.info("Object built! Object: ", object);
 
         return object;
     }
