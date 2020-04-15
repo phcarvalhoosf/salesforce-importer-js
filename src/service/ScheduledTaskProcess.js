@@ -13,7 +13,7 @@ module.exports = class ScheduledTaskProcess {
         parser.parse((objectArray) => {
             const jobProcessor = new JobProcessor(scheduledTask.data.objectType, scheduledTask.data.operationType);
 
-            jobProcessor.executeNewBatch(objectArray,
+            jobProcessor.execute(objectArray,
                 (recordResultArray, batchResultInfoArray) => {
                     global.logger.info("Batch executed!");
                     batchResultInfoArray.forEach(

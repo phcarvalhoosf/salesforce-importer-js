@@ -11,9 +11,6 @@ module.exports = class CSVObjectParser {
         global.logger.info("Start file parse! File path: ", this.filePath);
 
         const readStream = ts.createReadStream(this.filePath);
-
-        global.logger.info("Read stream created! Read stream: ", readStream);
-
         const objectArray = [];
         let templateObject = null;
 

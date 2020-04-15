@@ -3,17 +3,31 @@ module.exports = class JobProcessor {
     constructor(objectType, operationType) {
         this.objectType = objectType;
         this.operationType = operationType;
-        this.job = global.salesforceAPI.connection.bulk.createJob(objectType, operationType);
-        this.job.info(
-            (error, jobInfo) => global.logger.info("Job assigned to the server! Id: ", jobInfo.id, " | Object type: ", jobInfo.object, " | Operation type: ", jobInfo.operation, " | Status: ", jobInfo.state));
     }
 
-    executeNewBatch(objectArray, callback) {
+    execute(objectArray, callback) {
+        this.job = global.salesforceAPI.connection.bulk.createJob(this.objectType, this.operationType);
+        this.job.info(
+            (error, jobInfo) => {
+                global.logger.info("Start job execution! Job id: ", jobInfo.id, " | Object type: ", jobInfo.object, " | Operation type: ", jobInfo.operation, " | Status: ", jobInfo.state, " | Object array length: ", objectArray.length);
+
+                const chunk = 10000;
+
+                for (let startIndex = 0; startIndex < objectArray.length; startIndex += chunk) {
+                    const partialObjectArray = objectArray.slice(startIndex, startIndex + chunk);
+
+                    global.logger.info("Start batch execution! Job id: ", jobInfo.id, " | Object array range: [", 1 + startIndex, ",", startIndex + partialObjectArray.length, "]");
+                    this._executeNewBatch(partialObjectArray, callback);
+                }
+            });
+    }
+
+    _executeNewBatch(objectArray, callback) {
         const batch = this.job.createBatch();
 
         batch.execute(objectArray, callback);
         batch.on("queue", (batch) => {
-            global.logger.info("Batch queued! Batch id: ", batch.id, " | Job id: ", batch.jobId);
+            global.logger.info("Batch queued! Job id: ", batch.jobId, " | Batch id: ", batch.id);
             // batch.poll(15 * 1000, 60 * 1000);
         });
         batch.on("error", (batchInfo) => global.logger.error("Batch error! Batch info: ", batchInfo));
