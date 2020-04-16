@@ -1,4 +1,4 @@
-const ts = require("fs");
+const fs = require("fs");
 const eventStream = require('event-stream');
 
 module.exports = class CSVObjectParser {
@@ -10,7 +10,7 @@ module.exports = class CSVObjectParser {
     parse(endCallback) {
         global.logger.info("Start file parse! File path: ", this.filePath);
 
-        const readStream = ts.createReadStream(this.filePath);
+        const readStream = fs.createReadStream(this.filePath);
         const objectArray = [];
         let templateObject = null;
 
